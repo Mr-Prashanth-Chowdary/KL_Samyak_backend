@@ -21,11 +21,11 @@ const paymentProofStorage = multer.diskStorage({
         cb(null, 'PaymentProofs'); // Destination folder for file uploads
     },
     filename: function (req, file, cb) {
-        const { firstname } = req.body;
+        const { email } = req.body;
         console.log(req.body)
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, `${firstname}-paymentProof-${uniqueSuffix}${path.extname(file.originalname)}`);
-        console.log("first name",firstname)
+        cb(null, `${email}-paymentProof-${uniqueSuffix}${path.extname(file.originalname)}`);
+        console.log("first name",email)
     }
 });
 
@@ -118,8 +118,8 @@ router.post('/signup', (req, res) => {
             // Save user to DB
             await newUser.save();
             // Send confirmation email
-            await sendConfirmationEmail(newUser.email, newUser.firstname);
             res.status(201).json({ message: 'User registered successfully' });
+            await sendConfirmationEmail(newUser.email, newUser.firstname);
         } catch (error) {
             console.error(error.message);
             res.status(500).send('Server Error');
